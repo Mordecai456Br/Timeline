@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 
 const Event = require('./event');
+const { request } = require('http');
 
 const PORT = 3000;
 const events = [];
@@ -23,14 +24,23 @@ app.post('/events',(request,response)=>{
     const newEvent = new Event (name, new Date(date), description, password || null);
     events.push(newEvent);
 
-    return response.status(201).json({message: 'Event created', id: events.length -1});
+    return response.status(201).json({message: 'Event created', id: events.length -1}, console.log(events));
 });
 
+app.post('/events/:id',(request,response)=>{
+    const {password} = request.body;
+    const id = parseInt(request.params.id);
+
+    const event = events[id];
+    if (!event) return response.status(404).json({error: 'Event not found'});
+
+    return response.json(event.getInfo(password));
+});
 
 app.listen(PORT, () => {
     console.log(`Server running in http://localhost:${PORT}`);
 });
-
+console.log(events);
 
 //viagemRecife.howManyTimeAgo();
 //eclipse.howManyTimeAgo();

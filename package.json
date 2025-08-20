@@ -1,0 +1,23 @@
+{
+  "name": "timeline",
+  "version": "1.0.0",
+  "description": "Track your events and see how many time ago it was",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mordecai456Br/Timeline.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mordecai456Br/Timeline/issues"
+  },
+  "homepage": "https://github.com/Mordecai456Br/Timeline#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

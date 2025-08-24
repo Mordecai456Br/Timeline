@@ -23,9 +23,11 @@ server.get("/events/:id", (req,res) => {
 server.get("/events/timeAgo/:id", (req,res) => {
     const id = parseInt(req.params.id);
     const event = events.find((event) => event.id === id);
+    if (!event) {
+        return res.status(404).json({message: 'event not found'})
+    }
     res.json({message: event.howManyTimeAgo(), date: event.date});
 })
-
 
 server.post("/events", (req, res) => {
     const { name, date, description} = req.body;

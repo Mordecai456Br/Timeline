@@ -28,7 +28,7 @@ const pool = new Pool({
 })();
 
 (async () => {
-    await pool.query(`CREATE TABLE IF NOT EXISTS event_users (
+    await pool.query(`CREATE TABLE IF NOT EXISTS events_users (
         id SERIAL PRIMARY KEY,
         event_id INT NOT NULL,
         user_id INT NOT NULL,

@@ -10,5 +10,7 @@ router.post('/events',eventController.create);
 router.put('/events/:id',eventController.update);
 router.delete('/events/:id',eventController.remove);
 router.delete('/events', eventController.returnRemove);
+
+
 module.exports = router;
 

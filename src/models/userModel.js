@@ -1,14 +1,12 @@
-const pool = require('../config/db');
-const table = "events";
+const pool = require('../config/db')
+const table = users;
 
+module.exports = {
 
-
-module.exports = { 
-
-    async findAll () {
+    async findAll() {
         const { rows } = await pool.query(
             `SELECT * FROM ${table} ORDER BY id ASC`
-        ); 
+        );
         return rows;
     },
 
@@ -19,29 +17,27 @@ module.exports = {
         return rows[0];
     },
 
-    async create({name, date, description}) {
-        const {rows} = await pool.query(
-            `INSERT INTO ${table} (name, date, description)
-            VALUES ($1, $2, $3)
-            RETURNING *`, [name, date, description]
+    async create({ name}) {
+        const { rows } = await pool.query(
+            `INSERT INTO ${table} (name)
+            VALUES ($1)
+            RETURNING *`, [name]
         );
         return rows[0];
     },
 
-    async update (id, { name, date, description}) {
+    async update(id, { name}) {
         const { rows } = await pool.query(
             `UPDATE ${table}
             SET name = COALESCE($2, name),
-                date = COALESCE($3::date, date),
-                description = COALESCE($4, description)
             WHERE id = $1
             RETURNING *`,
-            [id, name ?? null, date ?? null, description ?? null]
+            [id, name ?? null]
         );
         return rows[0];
     },
 
-    async remove (id) {
+    async remove(id) {
         const { rows } = await pool.query(
             `DELETE FROM ${table} WHERE id = $1
             RETURNING *`,
@@ -49,6 +45,4 @@ module.exports = {
         );
         return rows[0];
     }
-    
- };
- 
+}

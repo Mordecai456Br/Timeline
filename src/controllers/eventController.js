@@ -2,21 +2,21 @@ const EventModel = require("../models/eventModel");
 
 module.exports = {
     
-    async listAll(req,res) {
+    async findAll(req,res) {
         try {
-            const events = await Event.findAll();
+            const events = await EventModel.findAll();
             return res.json(events);
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
         }
     },
 
-    async getById (req, res) {
+    async findById (req, res) {
         try {
             const id = Number(req.params.id);
             const event = await EventModel.findById(id);
 
-            if (!event) return res.stauts(404).json({message: 'event not found'});
+            if (!event) return res.status(404).json({message: 'event not found'});
             return res.json(event);
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
@@ -71,5 +71,9 @@ module.exports = {
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
         }
+    },
+
+    async returnRemove (req, res) {
+        return res.json({message: 'you must specify the id to be deleted, use -> /events/id'})
     }
 }

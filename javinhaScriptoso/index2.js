@@ -1,6 +1,6 @@
 console.log("Events ahead!");
 
-const express = require("express");
+ const express = require("express");
 const { events, Event } = require('./event.js');
 
 const server = express();

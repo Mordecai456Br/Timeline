@@ -1,5 +1,5 @@
 const pool = require('../config/db')
-const table = users;
+const table = "users";
 
 module.exports = {
 
@@ -29,7 +29,7 @@ module.exports = {
     async update(id, { name}) {
         const { rows } = await pool.query(
             `UPDATE ${table}
-            SET name = COALESCE($2, name),
+            SET name = COALESCE($2, name)
             WHERE id = $1
             RETURNING *`,
             [id, name ?? null]

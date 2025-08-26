@@ -1,7 +1,7 @@
 require('dotenv').config();
-const {Pool} = require('pg')
+const { Pool } = require('pg')
 
-const pool = new Pool ({
+const pool = new Pool({
     host: process.env.PGHOST,
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
@@ -33,16 +33,18 @@ const pool = new Pool ({
         event_id INT NOT NULL,
         user_id INT NOT NULL,
         CONSTRAINT fk_event
-            FOREING KEY (event_id) REFERENCES events(id)
+            FOREIGN KEY (event_id) REFERENCES events(id)
             ON DELETE CASCADE,
         CONSTRAINT fk_user
-            FOREING KEY (user_id) REFERENCES users(id)
+            FOREIGN KEY (user_id) REFERENCES users(id)
             ON DELETE CASCADE
     );
     `);
 })();
 
+
+
 pool.connect().then(() => console.log("✅ Conectado ao PostgreSQL!"))
-.catch(err => console.error("❌ Erro ao conectar:", err));
+    .catch(err => console.error("❌ Erro ao conectar:", err));
 
 module.exports = pool;

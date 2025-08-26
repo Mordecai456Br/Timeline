@@ -1,3 +1,6 @@
+
+
+const UserModel = require("../models/userModel");
 const EventModel = require("../models/eventModel");
 
 module.exports = {
@@ -68,6 +71,30 @@ module.exports = {
             const eventDeleted = await EventModel.remove(id);
             if(!eventDeleted) return res.status(404).json({message: 'event not found'});
             return res.json({message: 'event deleted', event: eventDeleted});
+        } catch (err) {
+            return res.status(500).json({ message: "internal error", detail: err.message });
+        }
+    },
+
+    async usersIntoEvent (req, res) {
+        try {
+            const eventId = Number(req.params.id);
+            const event = EventModel.findById(eventId);
+            if(!event) return res.status(404).json({message: 'event not found'});
+
+            const { usersIds } = req.body;
+
+            if (!Array.isArray(usersIds) || usersIds.length === 0){
+                return res.status(400).json({ message: 'usersIds must be a non-empty array' });
+            }
+
+            for (const userId of usersIds) {
+                const userFound = await UserModel.findById(userId);
+                if (!userFound) { return res.status(404).json({message: `user with id ${userId} not found`})}
+            }
+            const result = await EventModel.usersIntoEvent(eventId, {usersIds});
+            return res.json({message: 'users added', event, users: result.rows});
+
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
         }

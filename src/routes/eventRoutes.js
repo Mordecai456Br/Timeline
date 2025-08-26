@@ -7,6 +7,7 @@ router.get('/events', eventController.findAll);
 router.get('/events/:id',eventController.findById);
 router.get('/events/timeAgo/:id',eventController.timeAgo);
 router.post('/events',eventController.create);
+router.post('/events/usersIntoEvent/:id',eventController.usersIntoEvent);
 router.put('/events/:id',eventController.update);
 router.delete('/events/:id',eventController.remove);
 router.delete('/events', eventController.returnRemove);

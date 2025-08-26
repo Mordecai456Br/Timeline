@@ -25,6 +25,7 @@ module.exports = {
             VALUES ($1, $2, $3)
             RETURNING *`, [name, date, description]
         );
+        
         return rows[0];
     },
 
@@ -48,7 +49,17 @@ module.exports = {
             [id]
         );
         return rows[0];
-    }
+    },
     
+    async usersIntoEvent (id, { usersIds }) {
+        for (const userId of usersIds) {
+            await pool.query(
+                `INSERT INTO events_users (event_id, user_id) VALUES ($1, $2)`, 
+                [id, userId]
+            );
+        }
+        return  await pool.query(`SELECT * FROM events_users WHERE event_id = $1`, [id])
+       
+    }
  };
  

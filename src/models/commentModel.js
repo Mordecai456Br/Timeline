@@ -1,6 +1,6 @@
 const pool = require('../config/db');
-const { findById } = require('./userModel');
-const table = comments;
+
+const table = "comments";
 
 module.exports = {
 
@@ -13,9 +13,7 @@ module.exports = {
 
     async findById(id){
         const { rows } = await pool.query(`
-            SELECT * FROM ${table} ORDER BY id ASC
-            WHERE id = $1  
-            `, [id]
+            SELECT * FROM ${table} WHERE id = $1`, [id]
         );
         return rows[0];
     },
@@ -44,7 +42,7 @@ module.exports = {
 
     async remove(id){
         const { rows } = await pool.query(`
-            DELETE FROM ${table} WHERE id = 1$
+            DELETE FROM ${table} WHERE id = $1
             RETURNING *`,
             [id]
         );

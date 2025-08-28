@@ -6,7 +6,8 @@ module.exports = {
 
     async findAll(){
         const { rows } = await pool.query(`
-            SELECT * FROM ${table} ORDER BY id ASC`);
+            SELECT * FROM ${table} ORDER BY id ASC`
+        );
         return rows;
     },
 
@@ -14,14 +15,17 @@ module.exports = {
         const { rows } = await pool.query(`
             SELECT * FROM ${table} ORDER BY id ASC
             WHERE id = $1  
-            `, [id]);
+            `, [id]
+        );
         return rows[0];
     },
     
     async create({ comment, event_id, user_id }) {
         const { rows } = await pool.query(`
-            INSERT INTO ${table} VALUES ($1, $2, $3)
-            RETURNING *`, [comment, event_id, user_id]);
+            INSERT INTO ${table} (comment, event_id, user_id)
+            VALUES ($1, $2, $3)
+            RETURNING *`, [comment, event_id, user_id]
+        );
         return rows[0];
     },
 
@@ -33,7 +37,8 @@ module.exports = {
                 user_id = COALESCE ($4, user_id)
             WHERE id = $1
             RETURNING *`,
-        [id, comment ?? null, event_id ?? null, user_id ?? null]);
+        [id, comment ?? null, event_id ?? null, user_id ?? null]
+    );
         return rows[0];
     },
 

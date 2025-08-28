@@ -1,14 +1,14 @@
 const express = require('express');
-const router = express.Router;
-const CommentModel = require ('../controllers/commentController');
+const router = express.Router();
+const commentController = require ('../controllers/commentController');
 
-router.get('/comments', CommentModel.findAll);
-router.get('/comments/:id', CommentModel.findById);
+router.get('/comments', commentController.findAll);
+router.get('/comments/:id', commentController.findById);
 
-router.post('/comments', CommentModel.create);
+router.post('/comments', commentController.create);
 
-router.put('/comments/:id', CommentModel.update);
+router.put('/comments/:id', commentController.update);
 
-router.delete('/comments/:id', CommentModel.delete);
+router.delete('/comments/:id', commentController.delete);
 
 module.exports = router;

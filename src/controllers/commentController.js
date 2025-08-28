@@ -1,5 +1,4 @@
 const CommentModel = require('../models/commentModel');
-const { findById } = require('./eventController');
 
 module.exports = {
 
@@ -29,7 +28,7 @@ module.exports = {
     async create(req, res){
         try {
             const { comment, event_id, user_id } = req.body
-            if(!event_id || user_id) return res.status(400).json({ message: 'event_id and user_id are required' });
+            if(!event_id || !user_id) return res.status(400).json({ message: 'event_id and user_id are required' });
 
             const commentCreated = await CommentModel.create({ comment, event_id, user_id })
             return res.status(201).json({message: "comment added", comment: comment})

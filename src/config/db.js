@@ -41,6 +41,22 @@ const pool = new Pool({
     );
     `);
 })();
+(async () => {
+    await pool.query(`CREATE TABLE IF NOT EXISTS comments (
+        id SERIAL PRIMARY KEY,
+        comment TEXT NOT NULL,
+        event_id INT NOT NULL,
+        user_id INT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_event
+            FOREIGN KEY (event_id) REFERENCES events(id)
+            ON DELETE CASCADE,
+        CONSTRAINT fk_user
+            FOREIGN KEY (user_id) REFERENCES users(id)
+            ON DELETE CASCADE
+    );
+    `);
+})();
 
 
 

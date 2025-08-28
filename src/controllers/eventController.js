@@ -2,7 +2,7 @@
 
 const UserModel = require("../models/userModel");
 const EventModel = require("../models/eventModel");
-const eventModel = require("../models/eventModel");
+const datesUtils = require("../utils/datesUtils");
 
 module.exports = {
 
@@ -19,9 +19,10 @@ module.exports = {
         try {
             const id = Number(req.params.id);
             const event = await EventModel.findById(id);
-
             if (!event) return res.status(404).json({ message: 'event not found' });
+
             return res.json(event);
+            
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
         }
@@ -31,12 +32,53 @@ module.exports = {
         try {
             const id = Number(req.params.id);
             const event = await EventModel.findById(id);
-
             if (!event) return res.status(404).json({ message: 'event not found' })
 
             const eventDate = new Date(event.date);
             const diferenceDays = Math.floor((Date.now() - eventDate.getTime()) / (1000 * 60 * 60 * 24));
             res.json({ message: `${event.name} was ${diferenceDays} days ago`, date: event.date });
+        } catch (err) {
+            return res.status(500).json({ message: "internal error", detail: err.message });
+        }
+    },
+
+    async timeAgoBetween(req, res) {
+        try {
+            const id = Number(req.params.id);
+            const event = await EventModel.findById(id);
+            if (!event) return res.status(404).json({ message: 'event not found' })
+
+            const { eventsIds } = req.body;
+
+            if (!Array.isArray(eventsIds) || eventsIds.length === 0) {
+                return res.status(400).json({ message: 'eventsIds must be a non-empty array' });
+            }
+
+            const results = [];
+
+            for (const eventId of eventsIds) {
+                const eventFound = await EventModel.findById(eventId);
+                if (!eventFound) {
+                    results.push({ eventId, message: 'event not found' })
+                } else {
+                    const eventDate = new Date(eventFound.date);
+                    const mainDate = new Date(event.date);
+                    let diferenceDays = Math.floor((eventDate - mainDate) / (1000 * 60 * 60 * 24));
+                    if (diferenceDays <= 0){
+                        diferenceDays = `${diferenceDays} days ago`
+                    } else {
+                        diferenceDays = `${diferenceDays} days in future (compared to ${event.name})`
+                    }
+                    results.push({
+                        id : eventFound.id,
+                        name: eventFound.name,
+                        date: datesUtils.ptbrDate(eventDate),
+                        diferenceDays: diferenceDays
+                    });
+                }
+            }
+            res.json({ mainEvent: `${event.name} | ${event.date} `, comparisons: results});
+
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
         }
@@ -106,17 +148,17 @@ module.exports = {
         }
     },
 
-    async getUsersFromEvent(req, res){
+    async getUsersFromEvent(req, res) {
         const eventId = Number(req.params.id);
         const event = await EventModel.findById(eventId);
-        if(!event) return res.status(404).json({message: 'event not found or dont have people associated'})
+        if (!event) return res.status(404).json({ message: 'event not found or dont have people associated' })
 
-        try{
+        try {
             const usersInEvent = await EventModel.getUsersFromEvent(eventId);
-            return res.json({message: usersInEvent})
+            return res.json({ message: usersInEvent })
         }
         catch (err) {
-            return res.status(500).json({message: 'internal error', detais: err.message})
+            return res.status(500).json({ message: 'internal error', detais: err.message })
         }
     },
 

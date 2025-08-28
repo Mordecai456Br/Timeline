@@ -15,8 +15,8 @@ module.exports = {
         try {
             const id = Number(req.params.id);
             const user = await userModel.findById(id);
-
             if (!user) return res.status(404).json({ message: 'user not found' });
+            
             return res.json(user);
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });

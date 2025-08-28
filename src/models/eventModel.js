@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const { timeAgoBetween } = require('../controllers/eventController');
 const table = "events";
 
 
@@ -75,6 +76,16 @@ module.exports = {
 
         return processedUsers;
 
+    },
+    
+    async timeAgoBetween({ eventsIds }){
+        const { rows } = await pool.query(`
+            SELECT events.id, events.name, events.date
+            FROM events
+            WHERE events.id = ANY ($1)`,
+        [eventsIds]);
+
+        return rows
     },
 
     async getUsersFromEvent(eventId) {

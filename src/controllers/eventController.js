@@ -22,7 +22,7 @@ module.exports = {
             if (!event) return res.status(404).json({ message: 'event not found' });
 
             return res.json(event);
-            
+
         } catch (err) {
             return res.status(500).json({ message: "internal error", detail: err.message });
         }
@@ -166,3 +166,4 @@ module.exports = {
         return res.json({ message: 'you must specify the id to be deleted, use -> /events/id' })
     }
 }
+
